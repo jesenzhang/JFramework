@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: UI_Altas_Bag
+  m_EditorData:
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingParameters:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 34666396bbc53054fa440f995a95b47c, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 27ebf5ea99437644089327ea1f4ecb65, type: 3}
+  - {fileID: 21300000, guid: 0ca7c9a0e6df7414bb66af31e5df8f43, type: 3}
+  - {fileID: 21300000, guid: 9354ed33f13ff1a42b7d712d842119a3, type: 3}
+  - {fileID: 21300000, guid: f30f64d7688b46d4fbd00bc8f551b29a, type: 3}
+  - {fileID: 21300000, guid: cff0a2bc165d56145a98fdc5ff1235bb, type: 3}
+  - {fileID: 21300000, guid: 48c5ae60d8a9e71419e34fe5ad50aff4, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - img_chuangjue_zhiye_08
+  - img_chuangjue_zhiye_09
+  - img_chuangjue_zhiye_07
+  - img_chuangjue_0
+  - img_chuangjue_1
+  - img_chuangjue_zhiye_10
+  m_Tag: UI_Altas_Bag
+  m_IsVariant: 0
