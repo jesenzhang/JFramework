@@ -9,7 +9,7 @@ namespace VFrame.ABSystem
         public string shortName;
         public string fullName;
         public string hash;
-        public string debugName;
+        public string assetPath;
         public AssetBundleExportType compositeType;
         public string[] dependencies;
         public bool isAnalyzed;
@@ -47,8 +47,8 @@ namespace VFrame.ABSystem
 
             while (true)
             {
-                string debugName = sr.ReadLine();
-                if (string.IsNullOrEmpty(debugName))
+                string assetPath = sr.ReadLine();
+                if (string.IsNullOrEmpty(assetPath))
                     break;
 
                 string name = sr.ReadLine();
@@ -67,7 +67,7 @@ namespace VFrame.ABSystem
                 sr.ReadLine(); // skip <------------->
 
                 AssetBundleData info = new AssetBundleData();
-                info.debugName = debugName;
+                info.assetPath = assetPath;
                 info.hash = hash;
                 info.fullName = name;
                 info.shortName = shortFileName;

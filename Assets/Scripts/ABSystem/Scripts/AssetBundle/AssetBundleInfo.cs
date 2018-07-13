@@ -46,7 +46,10 @@ namespace VFrame.ABSystem
         {
 
         }
-
+        public AssetBundleInfo(Object mainObj)
+        {
+            _mainObject = mainObj;
+        }
         public void AddDependency(AssetBundleInfo target)
         {
             if (target != null && deps.Add(target))
@@ -279,6 +282,10 @@ namespace VFrame.ABSystem
                 }
                 return _mainObject;
             }
+
+            set {
+                _mainObject = value;
+            }
         }
 
         void UnloadBundle()
@@ -286,7 +293,7 @@ namespace VFrame.ABSystem
             if (bundle != null)
             {
                 if (AssetBundleManager.enableLog)
-                    Debug.Log("Unload : " + data.compositeType + " >> " + data.debugName);
+                    Debug.Log("Unload : " + data.compositeType + " >> " + data.assetPath);
 
                 bundle.Unload(false);
             }

@@ -60,7 +60,7 @@ namespace VFrame.ABSystem
 
         public static void LoadCache()
         {
-            string cacheTxtFilePath = pathResolver.HashCacheSaveFile;
+            string cacheTxtFilePath = AssetBundlePathResolver.HashCacheSaveFile;
             if (File.Exists(cacheTxtFilePath))
             {
                 string value = File.ReadAllText(cacheTxtFilePath);
@@ -104,7 +104,7 @@ namespace VFrame.ABSystem
 
         public static void SaveCache()
         {
-            StreamWriter sw = new StreamWriter(pathResolver.HashCacheSaveFile);
+            StreamWriter sw = new StreamWriter(AssetBundlePathResolver.HashCacheSaveFile);
             sw.WriteLine(AssetBundleManager.version.ToString());
             foreach (AssetTarget target in _object2target.Values)
             {
@@ -214,7 +214,6 @@ namespace VFrame.ABSystem
             string bn = assetPath
                 .Replace(AssetPath, "")
                 .Replace('\\', '/')
-                .Replace(AssetBundlePathResolver.instance.BundleResource,"")
                 .Replace('\\', '.')
                 .Replace('/', '.')
                 .Replace(" ", "_")
@@ -254,6 +253,35 @@ namespace VFrame.ABSystem
             if (_fileHashOld.ContainsKey(path))
                 return _fileHashOld[path];
             return null;
+        }
+
+        public static void RenameFile(string path, string origin, string dest)
+        {
+            if (!File.Exists(path + origin))
+                return;
+
+            string tempPath = "Export/temp/";
+            if (!Directory.Exists(tempPath))
+                Directory.CreateDirectory(tempPath);
+
+            File.Copy(path + origin, tempPath + origin);
+            File.Delete(path + origin);
+
+            string dirName = Path.GetFileNameWithoutExtension(Path.GetDirectoryName(path));
+            if (File.Exists(path + dirName))
+            {
+                File.Delete(path + dirName);
+            }
+            if (File.Exists(path + dirName + ".manifest"))
+            {
+                File.Delete(path + dirName + ".manifest");
+            }
+            if (File.Exists(path + origin + ".manifest"))
+            {
+                File.Delete(path + origin + ".manifest");
+            }
+            
+            File.Move(tempPath + origin, path + dest);
         }
     }
 }

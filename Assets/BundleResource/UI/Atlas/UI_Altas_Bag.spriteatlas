@@ -32,6 +32,7 @@ SpriteAtlas:
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: f29726595ebc80c44aff2197c57f2968, type: 3}
   - {fileID: 21300000, guid: 27ebf5ea99437644089327ea1f4ecb65, type: 3}
   - {fileID: 21300000, guid: 0ca7c9a0e6df7414bb66af31e5df8f43, type: 3}
   - {fileID: 21300000, guid: 9354ed33f13ff1a42b7d712d842119a3, type: 3}
@@ -39,6 +40,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: cff0a2bc165d56145a98fdc5ff1235bb, type: 3}
   - {fileID: 21300000, guid: 48c5ae60d8a9e71419e34fe5ad50aff4, type: 3}
   m_PackedSpriteNamesToIndex:
+  - img_chuangjue_03
   - img_chuangjue_zhiye_08
   - img_chuangjue_zhiye_09
   - img_chuangjue_zhiye_07

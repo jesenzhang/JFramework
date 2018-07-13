@@ -2,7 +2,7 @@
 #else
 #define _AB_MODE_
 #endif
-
+#define _AB_MODE_
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,8 +22,17 @@ namespace VFrame.ABSystem
     public class AssetBundleManager : MonoBehaviour
     {
         public static Version version = new Version(0, 1, 0);
-        public static AssetBundleManager Instance;
-        public static string NAME = "AssetBundleManager";
+        private static AssetBundleManager instance;
+        public static AssetBundleManager Instance {
+            get {
+                if (instance == null)
+                {
+                    instance = new GameObject("AssetBundleManager").AddComponent<AssetBundleManager>();
+                    GameObject.DontDestroyOnLoad(instance);
+                }
+                return instance;
+            }
+        }
         public static bool enableLog = true;
 
         public delegate void LoadAssetCompleteHandler(AssetBundleInfo info);
@@ -73,23 +82,21 @@ namespace VFrame.ABSystem
         /// 进度
         /// </summary>
         public LoadProgressHandler onProgress;
-
-        public AssetBundlePathResolver pathResolver;
-
+        
         private AssetBundleDataReader _depInfoReader;
 
         private Action _initCallback;
 
         public AssetBundleManager()
         {
-            Instance = this;
-            pathResolver = new AssetBundlePathResolver();
         }
 
         public AssetBundleDataReader depInfoReader { get { return _depInfoReader; } }
+        public Dictionary<string, AssetBundleInfo> GetLoadedAssetBundle() {  return _loadedAssetBundle; }
 
         protected void Awake()
         {
+            instance = this;
 			InvokeRepeating("CheckUnusedBundle", 0, 5);
         }
 
@@ -144,10 +151,10 @@ namespace VFrame.ABSystem
 
         IEnumerator LoadDepInfo()
         {
-            string depFile = string.Format("{0}/{1}", pathResolver.BundleCacheDir, pathResolver.DependFileName);
+            string depFile = string.Format("{0}/{1}", AssetBundlePathResolver.BundleCacheDir, AssetBundlePathResolver.DependFileName);
             //编辑器模式下测试AB_MODE，直接读取
 #if UNITY_EDITOR
-            depFile = pathResolver.GetBundleSourceFile(pathResolver.DependFileName, false);
+            depFile = AssetBundlePathResolver.GetBundleSourceFile(AssetBundlePathResolver.DependFileName, false);
 #endif
 
             if (File.Exists(depFile))
@@ -158,7 +165,7 @@ namespace VFrame.ABSystem
             }
             else
             {
-                string srcURL = pathResolver.GetBundleSourceFile(pathResolver.DependFileName);
+                string srcURL = AssetBundlePathResolver.GetBundleSourceFile(AssetBundlePathResolver.DependFileName);
                 WWW w = new WWW(srcURL);
                 yield return w;
 
@@ -215,7 +222,7 @@ namespace VFrame.ABSystem
         public AssetBundleLoader Load(string path, int prority, LoadAssetCompleteHandler handler = null)
         {
 #if _AB_MODE_
-            AssetBundleLoader loader = this.CreateLoader(HashUtil.Get(path.ToLower()) + ".ab", path);
+            AssetBundleLoader loader = this.CreateLoader(path); //AssetBundleLoader loader = this.CreateLoader(HashUtil.Get(path.ToLower()) + ".ab", path);
 #else
             AssetBundleLoader loader = this.CreateLoader(path);
 #endif
@@ -243,7 +250,7 @@ namespace VFrame.ABSystem
                 AssetBundleData data = _depInfoReader.GetAssetBundleInfo(abFileName);
                 if (data == null && oriName != null)
                 {
-                    data = _depInfoReader.GetAssetBundleInfoByShortName(oriName.ToLower());
+                    data = _depInfoReader.GetAssetBundleInfoByShortName(oriName);
                 }
                 if (data == null)
                 {
@@ -322,7 +329,7 @@ namespace VFrame.ABSystem
 
         public AssetBundleInfo GetBundleInfo(string key)
         {
-            key = key.ToLower();
+            //key = key.ToLower();
 #if _AB_MODE_
             key = HashUtil.Get(key) + ".ab";
 #endif
@@ -407,7 +414,7 @@ namespace VFrame.ABSystem
         {
             if (abi == null)
                 abi = new AssetBundleInfo();
-            abi.bundleName = loader.bundleName.ToLower();
+            abi.bundleName = loader.bundleName;//.ToLower();
             abi.bundle = assetBundle;
             abi.data = loader.bundleData;
 

@@ -9,24 +9,16 @@ namespace VFrame.ABSystem
     {
         public BuildAssetBundleOptions option = BuildAssetBundleOptions.ChunkBasedCompression;
         protected AssetBundleDataWriter dataWriter = new AssetBundleDataBinaryWriter();
-        protected AssetBundlePathResolver pathResolver;
-
-        public ABBuilder() : this(new AssetBundlePathResolver())
+        
+        public ABBuilder()
         {
-
-        }
-
-        public ABBuilder(AssetBundlePathResolver resolver)
-        {
-            this.pathResolver = resolver;
             this.InitDirs();
-            AssetBundleUtils.pathResolver = pathResolver;
         }
 
         void InitDirs()
         {
-            new DirectoryInfo(pathResolver.BundleSavePath).Create();
-            new FileInfo(pathResolver.HashCacheSaveFile).Directory.Create();
+            new DirectoryInfo(AssetBundlePathResolver.BundleSavePath).Create();
+            new FileInfo(AssetBundlePathResolver.HashCacheSaveFile).Directory.Create();
         }
 
         public void Begin()
@@ -85,7 +77,7 @@ namespace VFrame.ABSystem
 
         protected void SaveDepAll(List<AssetTarget> all)
         {
-            string path = Path.Combine(pathResolver.BundleSavePath, pathResolver.DependFileName);
+            string path = Path.Combine(AssetBundlePathResolver.BundleSavePath, AssetBundlePathResolver.DependFileName);
 
             if (File.Exists(path))
                 File.Delete(path);
@@ -120,7 +112,7 @@ namespace VFrame.ABSystem
                     usedSet.Add(target.bundleName);
             }
 
-            DirectoryInfo di = new DirectoryInfo(pathResolver.BundleSavePath);
+            DirectoryInfo di = new DirectoryInfo(AssetBundlePathResolver.BundleSavePath);
             FileInfo[] abFiles = di.GetFiles("*.ab");
             for (int i = 0; i < abFiles.Length; i++)
             {

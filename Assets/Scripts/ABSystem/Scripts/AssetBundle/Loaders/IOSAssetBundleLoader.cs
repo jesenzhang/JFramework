@@ -17,7 +17,7 @@ namespace VFrame.ABSystem
             _bundle = AssetBundle.CreateFromFile(_assetBundleSourceFile);
             yield return null;
 #else
-            _assetBundleSourceFile = bundleManager.pathResolver.GetBundleSourceFile(bundleName, false);
+            _assetBundleSourceFile = AssetBundlePathResolver.GetBundleSourceFile(bundleName, false);
             AssetBundleCreateRequest req = AssetBundle.LoadFromFileAsync(_assetBundleSourceFile);
             yield return req;
             _bundle = req.assetBundle;

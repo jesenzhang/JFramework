@@ -82,9 +82,9 @@ namespace VFrame.ABSystem
         {
             this.asset = o;
             this.file = file;
-            this.assetPath = assetPath;
             string objPath = AssetDatabase.GetAssetPath(o);
-            this.bundleShortName = file.Name.ToLower();
+            this.assetPath = objPath;
+            this.bundleShortName = file.Name;//.ToLower();
             string fileName = Path.GetFileNameWithoutExtension(assetPath);
             this.bundleName = fileName;// file.Name.Substring(0,file.Name.IndexOf("."));// AssetBundleUtils.ConvertToABName(assetPath) + ".ab"; // HashUtil.Get(AssetBundleUtils.ConvertToABName(assetPath)) + ".ab";
 
@@ -96,7 +96,7 @@ namespace VFrame.ABSystem
         if (!Directory.Exists(exportPath))
             Directory.CreateDirectory(exportPath);
        */
-            this.bundleSavePath = AssetBundlePathResolver.instance.BundleSavePath;// Path.Combine(exportPath, bundleName);
+            this.bundleSavePath = AssetBundlePathResolver.BundleSavePath;// Path.Combine(exportPath, bundleName);
 
             _isFileChanged = true;
             _metaHash = "0";

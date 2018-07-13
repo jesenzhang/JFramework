@@ -30,19 +30,6 @@ namespace VFrame.ABSystem
     /// </summary>
     public class EditorModeAssetBundleLoader : AssetBundleLoader
     {
-        class ABInfo : AssetBundleInfo
-        {
-            public override Object mainObject
-            {
-                get
-                {
-                    string newPath = AssetBundlePathResolver.instance.GetEditorModePath(bundleName);
-                    Object mainObject = AssetDatabase.LoadMainAssetAtPath(newPath);
-                    return mainObject;
-                }
-            }
-        }
-
         public override void Start()
         {
             bundleManager.StartCoroutine(this.LoadResource());
@@ -57,15 +44,15 @@ namespace VFrame.ABSystem
         IEnumerator LoadResource()
         {
             yield return new WaitForEndOfFrame();
-
-            string newPath = AssetBundlePathResolver.instance.GetEditorModePath(bundleName);
-            Object mainObject = AssetDatabase.LoadMainAssetAtPath(newPath);
+          
+            //string newPath = AssetBundlePathResolver.GetEditorModePath(bundleName);
+            Object mainObject = AssetDatabase.LoadMainAssetAtPath(this.bundleData.assetPath);
             if (mainObject)
             {
                 if (bundleInfo == null)
                 {
                     state = LoadState.State_Complete;
-                    bundleInfo = bundleManager.CreateBundleInfo(this, new ABInfo());
+                    bundleInfo = bundleManager.CreateBundleInfo(this, new AssetBundleInfo(mainObject));
                     bundleInfo.isReady = true;
                     bundleInfo.onUnloaded = OnBundleUnload;
                 }

@@ -68,7 +68,8 @@ namespace VFrame.ABSystem
             new GUIContent("Standard Compression (LZMA)"),
             new GUIContent("Chunk Based Compression (LZ4)")
         };
-
+        [SerializeField]
+        public string m_OutPutPath = "Export/AssetBundles";
         public List<AssetBundleFilter> filters = new List<AssetBundleFilter>();
     }
 

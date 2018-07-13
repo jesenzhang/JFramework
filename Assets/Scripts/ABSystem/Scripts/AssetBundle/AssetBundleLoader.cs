@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace VFrame.ABSystem
 {
@@ -181,8 +182,8 @@ namespace VFrame.ABSystem
         /// </summary>
         override public void LoadBundle()
         {
-            _assetBundleCachedFile = string.Format("{0}/{1}", bundleManager.pathResolver.BundleCacheDir, bundleName);
-            _assetBundleSourceFile = bundleManager.pathResolver.GetBundleSourceFile(bundleName);
+            _assetBundleCachedFile = string.Format("{0}/{1}", AssetBundlePathResolver.BundleCacheDir, bundleName);
+            _assetBundleSourceFile = AssetBundlePathResolver.GetBundleSourceFile(bundleName);
 
             if (File.Exists(_assetBundleCachedFile))
                 bundleManager.StartCoroutine(LoadFromCachedFile());
@@ -221,25 +222,26 @@ namespace VFrame.ABSystem
             if (state != LoadState.State_Error)
             {
                 //加载主体
-                WWW www = new WWW(_assetBundleSourceFile);
-                yield return www;
-
-                //加载完缓存一份，便于下次快速加载
-                if (www.error == null)
+                using (UnityWebRequest www = UnityWebRequest.GetAssetBundle(_assetBundleSourceFile))
                 {
-                    File.WriteAllBytes(_assetBundleCachedFile, www.bytes);
+                    yield return www.SendWebRequest();
+                    if (www.error != null)
+                    {
+                        Debug.Log(www.error);
+                        Error();
+                    }
+                    else
+                    {
+                        Debug.Log(www.downloadHandler.text);
+                        //加载完缓存一份，便于下次快速加载
+                        File.WriteAllBytes(_assetBundleCachedFile, www.downloadHandler.data);
 
-                    _bundle = www.assetBundle;
+                        _bundle = DownloadHandlerAssetBundle.GetContent(www); ;
 
-                    Complete();
+                        Complete();
+                    }
+                    www.Dispose();
                 }
-                else
-                {
-                    Error();
-                }
-
-                www.Dispose();
-                www = null;
             }
         }
 

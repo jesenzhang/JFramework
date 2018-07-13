@@ -8,8 +8,8 @@ namespace VFrame.ABSystem
     public class AssetBundleBuilder5x : ABBuilder
     {
 
-        public AssetBundleBuilder5x(AssetBundlePathResolver resolver)
-            : base(resolver)
+        public AssetBundleBuilder5x()
+            : base()
         {
 
         }
@@ -57,12 +57,12 @@ namespace VFrame.ABSystem
             }
 
             //开始打包
-            BuildPipeline.BuildAssetBundles(pathResolver.BundleSavePath, list.ToArray(), option, EditorUserBuildSettings.activeBuildTarget);
+            BuildPipeline.BuildAssetBundles(AssetBundlePathResolver.BundleSavePath, list.ToArray(), option, EditorUserBuildSettings.activeBuildTarget);
 
 #if UNITY_5_1 || UNITY_5_2
             AssetBundle ab = AssetBundle.CreateFromFile(pathResolver.BundleSavePath + "/AssetBundles");
 #else
-            AssetBundle ab = AssetBundle.LoadFromFile(pathResolver.BundleSavePath + "/AssetBundles");
+            AssetBundle ab = AssetBundle.LoadFromFile(AssetBundlePathResolver.BundleSavePath + "/AssetBundles");
 #endif
             AssetBundleManifest manifest = ab.LoadAsset("AssetBundleManifest") as AssetBundleManifest;
             //hash
@@ -75,6 +75,7 @@ namespace VFrame.ABSystem
                     target.bundleCrc = hash.ToString();
                     Debug.Log(""+ target.assetPath+"   "+" " + target.bundleName+" " + target.bundleCrc);
                 }
+                  AssetBundleUtils.RenameFile(AssetBundlePathResolver.BundleSavePath + "/", target.bundleName.ToLower(), target.bundleName);
             }
             this.SaveDepAll(all);
             ab.Unload(true);
@@ -84,5 +85,7 @@ namespace VFrame.ABSystem
             AssetDatabase.Refresh();
         }
     }
+
+   
 }
 #endif

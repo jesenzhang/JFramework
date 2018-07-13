@@ -11,7 +11,7 @@ using UnityEditor.PackageManager;
 public class AtlasMaker : EditorWindow
 {
     private static string sptDesDir = Application.dataPath + "/BundleResource/UI/Atlas";
-    private static string sptSrcDir = Application.dataPath + "/Art";
+    private static string sptSrcDir = Application.dataPath + "/BundleEditor/UI/Atlas";
     [MenuItem("AtlasMaker/Test")]
     public static void TTest() {
 
@@ -81,6 +81,7 @@ public class AtlasMaker : EditorWindow
     [MenuItem("AtlasMaker/AtlasMaker By Sprites")]
     public static void CreateAtlasBySprite()
     {
+        //Object[] objs = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
         string[] paths = Selection.assetGUIDs;
         if (paths.Length <= 0)
         {

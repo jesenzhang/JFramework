@@ -26,7 +26,7 @@ namespace VFrame.ABSystem
                 return;
 
 #if UNITY_5 || UNITY_2017_1_OR_NEWER
-			ABBuilder builder = new AssetBundleBuilder5x(new AssetBundlePathResolver());
+			ABBuilder builder = new AssetBundleBuilder5x();
 #else
 			ABBuilder builder = new AssetBundleBuilder4x(new AssetBundlePathResolver());
 #endif
@@ -119,6 +119,30 @@ namespace VFrame.ABSystem
                 {
                     ShowNotification(new GUIContent("不能在Assets目录之外!"));
                 }
+            }
+            return null;
+        }
+        string SelectFolder(bool allFolder)
+        {
+            if (allFolder)
+            {
+                Debug.Log(EditorUserBuildSettings.activeBuildTarget.ToString());
+                string dataPath = Application.dataPath;
+                string selectedPath = EditorUtility.OpenFolderPanel("Path", dataPath, "");
+                string appPath = dataPath.Substring(0, dataPath.IndexOf("Assets"));
+                if (selectedPath.StartsWith(appPath))
+                {
+                    return  selectedPath.Substring(appPath.Length);
+                }
+                else
+                {
+                    ShowNotification(new GUIContent("不能在appPath目录之外!"));
+                }
+                return selectedPath;
+            }
+            else
+            {
+                SelectFolder();
             }
             return null;
         }
@@ -221,6 +245,22 @@ namespace VFrame.ABSystem
                 }
                 GUILayout.EndHorizontal();
                 GUILayout.Space(10);
+
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.PrefixLabel("OutPutPath[没有启用，无效]");
+
+                GUI.enabled = false;
+                GUILayout.TextField(_config.m_OutPutPath);
+                GUI.enabled = true;
+                if(GUILayout.Button("Select"))
+                {
+                    var path = SelectFolder(true);
+                    if (path != null)
+                        _config.m_OutPutPath = path;
+                }
+
+                GUILayout.EndHorizontal();
+                GUILayout.Space(10);
                 //Filter item list
                 _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
                 {
@@ -246,8 +286,6 @@ namespace VFrame.ABSystem
 
         void Save()
         {
-            AssetBundlePathResolver.instance = new AssetBundlePathResolver();
-
             if (LoadAssetAtPath<AssetBundleBuildConfig>(savePath) == null)
             {
                 AssetDatabase.CreateAsset(_config, savePath);
